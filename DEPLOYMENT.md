@@ -24,15 +24,16 @@ Novosty CRM - веб-приложение для управления конта
 │   ├── settings.py              # Настройки проекта
 │   ├── urls.py                  # Главный роутинг
 │   └── wsgi.py                  # WSGI точка входа
-├── contacts/                    # Приложение управления контактами
-│   ├── admin.py                 # Django Admin панель
-│   ├── apps.py                  # Конфигурация приложения
-│   ├── models.py                # Модели данных (Contact)
-│   ├── serializers.py           # DRF сериализаторы
-│   ├── repositories.py          # Слой доступа к данным
-│   ├── services.py              # Бизнес-логика
-│   ├── views.py                 # API эндпоинты
-│   └── urls.py                  # Роутинг приложения
+├── apps
+    ├── contacts/                    # Приложение управления контактами
+        │   ├── admin.py                 # Django Admin панель
+        │   ├── apps.py                  # Конфигурация приложения
+        │   ├── models.py                # Модели данных (Contact)
+        │   ├── serializers.py           # DRF сериализаторы
+        │   ├── repositories.py          # Слой доступа к данным
+        │   ├── services.py              # Бизнес-логика
+        │   ├── views.py                 # API эндпоинты
+        │   └── urls.py                  # Роутинг приложения
 ├── templates/
 │   └── index.html               # Главная страница фронтенда
 ├── staticfiles/                 # Собранная статика (после collectstatic)
