@@ -11,8 +11,10 @@ from typing import Any
 
 from apps.contacts.serializers import ContactCreateSerializer, ContactListSerializer
 from apps.contacts.services import get_contact_service, ContactService
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class ContactListCreateAPIView(APIView):
     """
     API View for listing and creating contacts.
@@ -113,6 +115,7 @@ class ContactListCreateAPIView(APIView):
             )
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ActiveContactsAPIView(APIView):
     """
     API View for retrieving only active contacts.
@@ -146,7 +149,7 @@ class ActiveContactsAPIView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class ContactDetailAPIView(APIView):
     """
     API View for retrieving, updating and deleting single contact.

@@ -1,0 +1,99 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Иван Иванов",
+      "email": "ivan@example.com",
+      "phone": "+79001234567",
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "name": "Мария Петрова",
+      "email": "maria@example.com",
+      "phone": "+79009876543",
+      "status": "inactive"
+    },
+    {
+      "name": "Тест Тестов",
+      "email": "test@test.ru",
+      "phone": "+79001111111",
+      "status": "active",
+      "id": 3
+    },
+    {
+      "name": "Петров",
+      "email": "alekkss1993@yandex.ru",
+      "phone": "86599595955",
+      "status": "active",
+      "id": 4
+    },
+    {
+      "name": "Евгений",
+      "email": "dsf@yandex.ru",
+      "phone": "+7916988842",
+      "status": "inactive",
+      "id": 5
+    },
+    {
+      "user_id": 0,
+      "username": "notadmin31E8B36D",
+      "email": "notadmin31E8B36D@tenable.com",
+      "password": "Aa13A2324E4",
+      "realname": "Nessus",
+      "comment": "Nessus test",
+      "deleted": true,
+      "role_name": "Nessus",
+      "role_id": 0,
+      "has_admin_role": false,
+      "reset_uuid": "string",
+      "Salt": "string",
+      "id": 6
+    },
+    {
+      "user_id": 0,
+      "username": "notadmin6B0A68F1",
+      "email": "notadmin6B0A68F1@tenable.com",
+      "password": "Aa11B8CFFD2",
+      "realname": "Nessus",
+      "comment": "Nessus test",
+      "deleted": true,
+      "role_name": "Nessus",
+      "role_id": 0,
+      "has_admin_role": false,
+      "reset_uuid": "string",
+      "Salt": "string",
+      "id": 7
+    },
+    {
+      "user_id": 0,
+      "username": "notadmin3FD55A9C",
+      "email": "notadmin3FD55A9C@tenable.com",
+      "password": "Aa12167BFE3",
+      "realname": "Nessus",
+      "comment": "Nessus test",
+      "deleted": true,
+      "role_name": "Nessus",
+      "role_id": 0,
+      "has_admin_role": false,
+      "reset_uuid": "string",
+      "Salt": "string",
+      "id": 8
+    },
+    {
+      "user_id": 0,
+      "username": "notadminE4A0C63B",
+      "email": "notadminE4A0C63B@tenable.com",
+      "password": "Aa18F7EFFBA",
+      "realname": "Nessus",
+      "comment": "Nessus test",
+      "deleted": true,
+      "role_name": "Nessus",
+      "role_id": 0,
+      "has_admin_role": false,
+      "reset_uuid": "string",
+      "Salt": "string",
+      "id": 9
+    }
+  ]
+}

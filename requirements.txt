@@ -1,26 +1,10 @@
-# Core Django Framework
+# Создай requirements.txt
+cat > requirements.txt << 'EOF'
 Django==5.0.1
 djangorestframework==3.14.0
-
-# Database
-psycopg2-binary==2.9.9
-
-# Environment variables
 python-dotenv==1.0.0
-
-# WSGI Server for production
 gunicorn==21.2.0
-
-# CORS headers for API
 django-cors-headers==4.3.1
-
-# Type checking support
 django-stubs==4.2.7
 djangorestframework-stubs==3.14.5
-
-# Code quality (optional, for development)
-# pytest==7.4.3
-# pytest-django==4.7.0
-# black==23.12.1
-# flake8==7.0.0
-# mypy==1.8.0
+EOF
