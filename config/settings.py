@@ -125,6 +125,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': None,  # No pagination for simple CRM
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': [],
 }
 
 # CORS settings
