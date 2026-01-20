@@ -5,7 +5,87 @@
 
 const API_BASE_URL = '/api';
 
-// Load all users
+// ========================================
+// НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ
+// ========================================
+
+/**
+ * Показать главный экран
+ * Single Responsibility: отвечает только за переключение на главную страницу
+ */
+function showHomeScreen() {
+    // Скрыть все экраны
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+    
+    // Показать главный экран
+    const homeScreen = document.getElementById('homeScreen');
+    if (homeScreen) {
+        homeScreen.classList.add('active');
+    }
+    
+    // Обновить активную навигационную кнопку
+    updateNavigationButtons('home');
+    
+    // Скрыть контролы пользователей в sidebar
+    const usersControls = document.getElementById('usersControls');
+    if (usersControls) {
+        usersControls.style.display = 'none';
+    }
+}
+
+/**
+ * Показать экран пользователей
+ * Single Responsibility: отвечает только за переключение на экран пользователей
+ */
+function showUsersScreen() {
+    // Скрыть все экраны
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+    
+    // Показать экран пользователей
+    const usersScreen = document.getElementById('usersScreen');
+    if (usersScreen) {
+        usersScreen.classList.add('active');
+    }
+    
+    // Обновить активную навигационную кнопку
+    updateNavigationButtons('users');
+    
+    // Показать контролы пользователей в sidebar
+    const usersControls = document.getElementById('usersControls');
+    if (usersControls) {
+        usersControls.style.display = 'block';
+    }
+    
+    // Загрузить пользователей при открытии экрана
+    loadUsers();
+}
+
+/**
+ * Обновить состояние навигационных кнопок
+ * @param {string} activeScreen - 'home' или 'users'
+ */
+function updateNavigationButtons(activeScreen) {
+    const navButtons = document.querySelectorAll('.nav-button');
+    navButtons.forEach((btn, index) => {
+        btn.classList.remove('active');
+        if ((activeScreen === 'home' && index === 0) || 
+            (activeScreen === 'users' && index === 1)) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+// ========================================
+// РАБОТА С ПОЛЬЗОВАТЕЛЯМИ (API)
+// ========================================
+
+/**
+ * Загрузить всех пользователей
+ */
 async function loadUsers() {
     try {
         const response = await fetch(`${API_BASE_URL}/users`);
@@ -13,6 +93,7 @@ async function loadUsers() {
 
         if (data.users) {
             displayUsers(data.users);
+            updateContentTitle('Все контакты');
         }
     } catch (error) {
         console.error('Error loading users:', error);
@@ -20,7 +101,9 @@ async function loadUsers() {
     }
 }
 
-// Load active users only
+/**
+ * Загрузить только активных пользователей
+ */
 async function loadActiveUsers() {
     try {
         const response = await fetch(`${API_BASE_URL}/users?status=active`);
@@ -28,6 +111,7 @@ async function loadActiveUsers() {
 
         if (data.users) {
             displayUsers(data.users);
+            updateContentTitle('Активные контакты');
         }
     } catch (error) {
         console.error('Error loading active users:', error);
@@ -35,7 +119,10 @@ async function loadActiveUsers() {
     }
 }
 
-// Display users in table
+/**
+ * Отобразить пользователей в таблице
+ * @param {Array} users - массив объектов пользователей
+ */
 function displayUsers(users) {
     const tbody = document.getElementById('tableBody');
 
@@ -69,7 +156,11 @@ function displayUsers(users) {
     `).join('');
 }
 
-// Delete user
+/**
+ * Удалить пользователя
+ * @param {number} userId - ID пользователя
+ * @param {string} userName - Имя пользователя для подтверждения
+ */
 async function deleteUser(userId, userName) {
     if (!confirm(`Вы уверены, что хотите удалить контакт "${userName}"?`)) {
         return;
@@ -97,23 +188,60 @@ async function deleteUser(userId, userName) {
     }
 }
 
-// Wrapper functions for HTML buttons
+// ========================================
+// ФИЛЬТРАЦИЯ И УПРАВЛЕНИЕ
+// ========================================
+
+/**
+ * Показать всех пользователей и обновить активную кнопку фильтра
+ */
 function showAll() {
-    // Переключить активную кнопку
-    document.querySelectorAll('.menu-button').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.menu-button')[0].classList.add('active');
-    
+    // Переключить активную кнопку фильтра
+    updateFilterButtons(0);
     loadUsers();
 }
 
+/**
+ * Показать только активных пользователей и обновить активную кнопку фильтра
+ */
 function showActive() {
-    // Переключить активную кнопку
-    document.querySelectorAll('.menu-button').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.menu-button')[1].classList.add('active');
-    
+    // Переключить активную кнопку фильтра
+    updateFilterButtons(1);
     loadActiveUsers();
 }
 
+/**
+ * Обновить состояние кнопок фильтра
+ * @param {number} activeIndex - индекс активной кнопки (0 или 1)
+ */
+function updateFilterButtons(activeIndex) {
+    const filterButtons = document.querySelectorAll('.filter-button');
+    filterButtons.forEach((btn, index) => {
+        btn.classList.remove('active');
+        if (index === activeIndex) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+/**
+ * Обновить заголовок контента
+ * @param {string} title - новый заголовок
+ */
+function updateContentTitle(title) {
+    const titleElement = document.getElementById('contentTitle');
+    if (titleElement) {
+        titleElement.textContent = title;
+    }
+}
+
+// ========================================
+// МОДАЛЬНОЕ ОКНО
+// ========================================
+
+/**
+ * Открыть модальное окно добавления контакта
+ */
 function openModal() {
     const modal = document.getElementById('modal');
     if (modal) {
@@ -125,6 +253,9 @@ function openModal() {
     }
 }
 
+/**
+ * Закрыть модальное окно
+ */
 function closeModal() {
     const modal = document.getElementById('modal');
     if (modal) {
@@ -132,10 +263,18 @@ function closeModal() {
     }
 }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
-    loadUsers();
+// ========================================
+// ИНИЦИАЛИЗАЦИЯ
+// ========================================
 
+/**
+ * Инициализация приложения при загрузке страницы
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    // По умолчанию показываем главный экран
+    showHomeScreen();
+
+    // Обработчик формы добавления пользователя
     const form = document.getElementById('addUserForm');
     if (form) {
         form.addEventListener('submit', async (e) => {
@@ -173,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Закрытие модального окна по клику на overlay
     const modal = document.getElementById('modal');
     if (modal) {
         modal.addEventListener('click', (e) => {
@@ -183,7 +323,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Format error message
+// ========================================
+// УТИЛИТЫ
+// ========================================
+
+/**
+ * Форматировать сообщение об ошибке
+ * @param {Object|string} error - объект ошибки или строка
+ * @returns {string} отформатированное сообщение
+ */
 function formatErrorMessage(error) {
     if (typeof error === 'object') {
         return Object.entries(error)

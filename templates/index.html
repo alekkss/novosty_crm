@@ -13,35 +13,97 @@
         <!-- Левая панель -->
         <div class="sidebar">
             <div class="logo">CRM Система</div>
-            <button class="menu-button active" onclick="showAll()">Показать всех</button>
-            <button class="menu-button" onclick="showActive()">Показать активных</button>
-            <button class="menu-button" onclick="openModal()">Добавить новый контакт</button>
+            
+            <!-- НАВИГАЦИОННОЕ МЕНЮ -->
+            <div class="navigation-section">
+                <button class="menu-button nav-button active" onclick="showHomeScreen()">
+                    <span class="icon">🏠</span>
+                    <span>Главная</span>
+                </button>
+                <button class="menu-button nav-button" onclick="showUsersScreen()">
+                    <span class="icon">👥</span>
+                    <span>Пользователи</span>
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ (показывается только на экране пользователей) -->
+            <div class="users-controls" id="usersControls" style="display: none;">
+                <button class="menu-button filter-button active" onclick="showAll()">Показать всех</button>
+                <button class="menu-button filter-button" onclick="showActive()">Показать активных</button>
+                <button class="menu-button filter-button" onclick="openModal()">Добавить новый контакт</button>
+            </div>
         </div>
 
         <!-- Правая панель -->
         <div class="content">
-            <div class="header">
-                <h1 id="contentTitle">Все контакты</h1>
-                <p id="contentSubtitle">Управление базой клиентов</p>
+            <!-- ГЛАВНЫЙ ЭКРАН -->
+            <div id="homeScreen" class="screen active">
+                <div class="header">
+                    <h1>Добро пожаловать в CRM Систему</h1>
+                    <p>Управление клиентами и контактами</p>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <div class="card-icon">👥</div>
+                        <div class="card-content">
+                            <h3>Пользователи</h3>
+                            <p>Управление базой контактов клиентов</p>
+                            <button class="btn btn-primary" onclick="showUsersScreen()">Перейти</button>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">📊</div>
+                        <div class="card-content">
+                            <h3>Статистика</h3>
+                            <p>Скоро появится функционал аналитики</p>
+                            <button class="btn btn-secondary" disabled>Скоро</button>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-icon">⚙️</div>
+                        <div class="card-content">
+                            <h3>Настройки</h3>
+                            <p>Конфигурация системы</p>
+                            <button class="btn btn-secondary" disabled>Скоро</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="table-container">
-                <table id="usersTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Имя</th>
-                            <th>Email</th>
-                            <th>Телефон</th>
-                            <th>Статус</th>
-                            <th>Действия</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- Данные загружаются через JavaScript -->
-                    </tbody>
-                </table>
+            <!-- ЭКРАН ПОЛЬЗОВАТЕЛЕЙ -->
+            <div id="usersScreen" class="screen">
+                <div class="header">
+                    <div class="header-with-back">
+                        <button class="btn-back" onclick="showHomeScreen()">
+                            ← Назад в меню
+                        </button>
+                    </div>
+                    <h1 id="contentTitle">Все контакты</h1>
+                    <p id="contentSubtitle">Управление базой клиентов</p>
+                </div>
+
+                <div class="table-container">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Имя</th>
+                                <th>Email</th>
+                                <th>Телефон</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Данные загружаются через JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -77,8 +139,6 @@
             </form>
         </div>
     </div>
-
-    
 
     <script src="{% static 'js/app.js' %}"></script>
 </body>
