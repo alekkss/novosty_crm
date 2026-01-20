@@ -1,0 +1,499 @@
+/**
+ * Table Styles
+ * Стили таблиц для отображения данных
+ * 
+ * Single Responsibility: отвечает только за стили таблиц
+ * Open/Closed: легко расширить новыми вариантами таблиц
+ */
+
+/* ========================================
+   TABLE CONTAINER
+   ======================================== */
+
+.table-container {
+    background: var(--color-white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: var(--border-radius-md);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    border-radius: var(--border-radius-md);
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+}
+
+/* ========================================
+   BASE TABLE
+   ======================================== */
+
+table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+    font-size: var(--font-size-medium);
+}
+
+/* ========================================
+   TABLE HEAD
+   ======================================== */
+
+thead {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-white);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+thead th {
+    padding: var(--spacing-lg);
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-medium);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+thead th:first-child {
+    border-radius: var(--border-radius-md) 0 0 0;
+}
+
+thead th:last-child {
+    border-radius: 0 var(--border-radius-md) 0 0;
+}
+
+/* Sortable header */
+thead th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background var(--transition-fast);
+}
+
+thead th.sortable:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+thead th.sortable::after {
+    content: '⇅';
+    margin-left: var(--spacing-xs);
+    opacity: 0.5;
+}
+
+thead th.sortable.asc::after {
+    content: '↑';
+    opacity: 1;
+}
+
+thead th.sortable.desc::after {
+    content: '↓';
+    opacity: 1;
+}
+
+/* ========================================
+   TABLE BODY
+   ======================================== */
+
+tbody tr {
+    border-bottom: 1px solid var(--color-gray-lighter);
+    transition: all var(--transition-base);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: var(--color-background);
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+tbody td {
+    padding: 18px var(--spacing-lg);
+    color: var(--color-dark);
+    vertical-align: middle;
+}
+
+/* ========================================
+   TABLE CELL TYPES
+   ======================================== */
+
+/* ID column */
+tbody td:first-child {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray);
+}
+
+/* Actions column */
+tbody td:last-child {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Email/Link cells */
+td.cell-link {
+    color: var(--color-secondary);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+td.cell-link:hover {
+    color: var(--color-primary);
+}
+
+/* Number cells */
+td.cell-number {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Date cells */
+td.cell-date {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ========================================
+   STATUS BADGES
+   ======================================== */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: var(--border-radius-round);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.status-active {
+    background: var(--color-status-active-bg);
+    color: var(--color-status-active-text);
+}
+
+.status-inactive {
+    background: var(--color-status-inactive-bg);
+    color: var(--color-status-inactive-text);
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Badge with icon */
+.status-badge::before {
+    margin-right: 4px;
+}
+
+.status-active::before {
+    content: '✓';
+}
+
+.status-inactive::before {
+    content: '✕';
+}
+
+.status-pending::before {
+    content: '⏳';
+}
+
+/* ========================================
+   TABLE VARIANTS
+   ======================================== */
+
+/* Striped table */
+.table-striped tbody tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* Bordered table */
+.table-bordered {
+    border: 1px solid var(--color-gray-lighter);
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid var(--color-gray-lighter);
+}
+
+/* Compact table */
+.table-compact thead th,
+.table-compact tbody td {
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* Hoverable table */
+.table-hover tbody tr {
+    cursor: pointer;
+}
+
+/* ========================================
+   TABLE ROW STATES
+   ======================================== */
+
+tbody tr.row-selected {
+    background: rgba(52, 152, 219, 0.1);
+}
+
+tbody tr.row-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+tbody tr.row-highlighted {
+    background: #fff3cd;
+    animation: highlightFade 2s ease-out;
+}
+
+@keyframes highlightFade {
+    from {
+        background: #ffc107;
+    }
+    to {
+        background: transparent;
+    }
+}
+
+/* ========================================
+   EMPTY TABLE STATE
+   ======================================== */
+
+.table-empty {
+    text-align: center;
+    padding: var(--spacing-xxl);
+    color: var(--color-gray);
+}
+
+.table-empty-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.5;
+}
+
+.table-empty-text {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-md);
+}
+
+/* ========================================
+   TABLE LOADING STATE
+   ======================================== */
+
+.table-loading {
+    position: relative;
+}
+
+.table-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   TABLE ACTIONS
+   ======================================== */
+
+.table-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    justify-content: flex-end;
+}
+
+.table-action-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-small);
+    border-radius: var(--border-radius-sm);
+}
+
+/* ========================================
+   TABLE PAGINATION
+   ======================================== */
+
+.table-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--color-gray-lighter);
+    background: var(--color-white);
+}
+
+.pagination-info {
+    color: var(--color-gray);
+    font-size: var(--font-size-medium);
+}
+
+.pagination-controls {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+/* ========================================
+   RESPONSIVE TABLE
+   ======================================== */
+
+@media (max-width: 768px) {
+    table {
+        font-size: var(--font-size-small);
+        min-width: 500px;
+    }
+
+    thead th,
+    tbody td {
+        padding: var(--spacing-sm);
+    }
+
+    thead th {
+        font-size: var(--font-size-small);
+        letter-spacing: 0.5px;
+    }
+
+    .status-badge {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    .table-actions {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    table {
+        min-width: 400px;
+        font-size: 12px;
+    }
+
+    thead th,
+    tbody td {
+        padding: 8px;
+    }
+
+    .btn-danger {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}
+
+/* ========================================
+   MOBILE CARD VIEW (alternative to table)
+   ======================================== */
+
+@media (max-width: 640px) {
+    .table-mobile-cards table,
+    .table-mobile-cards thead,
+    .table-mobile-cards tbody,
+    .table-mobile-cards tr,
+    .table-mobile-cards th,
+    .table-mobile-cards td {
+        display: block;
+    }
+
+    .table-mobile-cards thead {
+        display: none;
+    }
+
+    .table-mobile-cards tbody tr {
+        margin-bottom: var(--spacing-md);
+        border: 1px solid var(--color-gray-lighter);
+        border-radius: var(--border-radius-sm);
+        padding: var(--spacing-md);
+    }
+
+    .table-mobile-cards tbody td {
+        padding: var(--spacing-sm) 0;
+        border: none;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .table-mobile-cards tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: var(--spacing-sm);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-gray);
+    }
+
+    .table-mobile-cards tbody td:last-child {
+        text-align: left;
+        padding-left: 0;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    tbody tr {
+        transition: none;
+    }
+
+    tbody tr:hover {
+        transform: none;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .table-container {
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    thead {
+        background: #333 !important;
+        color: white !important;
+    }
+
+    tbody tr:hover {
+        background: none;
+        transform: none;
+    }
+
+    .table-actions,
+    .btn {
+        display: none;
+    }
+}

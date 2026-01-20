@@ -1,0 +1,355 @@
+/**
+ * Layout Styles
+ * Структура страницы и сетки
+ * 
+ * Single Responsibility: отвечает только за layout и структуру страницы
+ */
+
+/* ========================================
+   MAIN CONTAINER
+   ======================================== */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--color-white);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    display: flex;
+    min-height: 90vh;
+}
+
+/* ========================================
+   SIDEBAR (LEFT PANEL)
+   ======================================== */
+
+.sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, var(--color-dark) 0%, var(--color-dark-secondary) 100%);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    color: var(--color-white);
+    flex-shrink: 0;
+}
+
+.logo {
+    font-size: var(--font-size-xlarge);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-xxl);
+    text-align: center;
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Навигационная секция */
+.navigation-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Разделитель */
+.divider {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 25px 0;
+}
+
+/* Контролы пользователей (фильтры) */
+.users-controls {
+    animation: fadeIn var(--transition-base);
+}
+
+/* ========================================
+   CONTENT AREA (RIGHT PANEL)
+   ======================================== */
+
+.content {
+    flex: 1;
+    padding: var(--spacing-xxl);
+    background: var(--color-background);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ========================================
+   SCREENS
+   ======================================== */
+
+.screen {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.header-with-back {
+    margin-bottom: var(--spacing-md);
+}
+
+.header h1 {
+    font-size: var(--font-size-xxlarge);
+    color: var(--color-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.header p {
+    color: var(--color-gray);
+    font-size: var(--font-size-base);
+}
+
+/* ========================================
+   DASHBOARD GRID (for cards)
+   ======================================== */
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: var(--spacing-xl);
+}
+
+/* ========================================
+   RESPONSIVE LAYOUT
+   ======================================== */
+
+/* Планшеты */
+@media (max-width: 1024px) {
+    .container {
+        min-height: 85vh;
+    }
+
+    .sidebar {
+        width: 240px;
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .content {
+        padding: var(--spacing-xl);
+    }
+
+    .dashboard-cards {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+    }
+}
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-sm);
+    }
+
+    .container {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: var(--spacing-lg);
+    }
+
+    .logo {
+        font-size: var(--font-size-large);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .divider {
+        margin: var(--spacing-md) 0;
+    }
+
+    .content {
+        padding: var(--spacing-lg);
+    }
+
+    .header h1 {
+        font-size: var(--font-size-xlarge);
+    }
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+}
+
+/* Маленькие мобильные */
+@media (max-width: 480px) {
+    body {
+        padding: var(--spacing-xs);
+    }
+
+    .sidebar {
+        padding: var(--spacing-md);
+    }
+
+    .content {
+        padding: var(--spacing-md);
+    }
+
+    .header {
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .header h1 {
+        font-size: var(--font-size-large);
+    }
+
+    .logo {
+        font-size: var(--font-size-medium);
+        margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-md);
+    }
+}
+
+/* ========================================
+   EMPTY STATE
+   ======================================== */
+
+.empty-state {
+    text-align: center;
+    padding: 60px var(--spacing-lg);
+    color: var(--color-gray);
+}
+
+.empty-state-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+
+.loading-spinner {
+    display: inline-block;
+    font-size: var(--font-size-large);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* ========================================
+   ERROR STATE
+   ======================================== */
+
+.error-message {
+    color: var(--color-danger);
+}
+
+.error-message > div:first-child {
+    font-size: 48px;
+    margin-bottom: var(--spacing-md);
+}
+
+.error-message > div:last-child {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* ========================================
+   CONTENT WRAPPER
+   ======================================== */
+
+.content-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* ========================================
+   FLEX UTILITIES
+   ======================================== */
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-between {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+.flex-shrink-0 {
+    flex-shrink: 0;
+}
+
+/* ========================================
+   SPACING UTILITIES
+   ======================================== */
+
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+.pt-sm { padding-top: var(--spacing-sm); }
+.pt-md { padding-top: var(--spacing-md); }
+.pt-lg { padding-top: var(--spacing-lg); }
+.pt-xl { padding-top: var(--spacing-xl); }
+
+.pb-sm { padding-bottom: var(--spacing-sm); }
+.pb-md { padding-bottom: var(--spacing-md); }
+.pb-lg { padding-bottom: var(--spacing-lg); }
+.pb-xl { padding-bottom: var(--spacing-xl); }
+
+/* ========================================
+   GRID UTILITIES
+   ======================================== */
+
+.grid {
+    display: grid;
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+.gap-xl { gap: var(--spacing-xl); }

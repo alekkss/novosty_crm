@@ -1,0 +1,588 @@
+/**
+ * Form Styles
+ * Стили элементов форм
+ * 
+ * Single Responsibility: отвечает только за стили форм
+ * Open/Closed: легко добавлять новые варианты элементов форм
+ */
+
+/* ========================================
+   FORM CONTAINER
+   ======================================== */
+
+form {
+    width: 100%;
+}
+
+.form {
+    background: var(--color-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+}
+
+/* ========================================
+   FORM GROUP
+   ======================================== */
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* ========================================
+   LABELS
+   ======================================== */
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-dark);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-medium);
+    line-height: 1.5;
+}
+
+.form-group label.required::after {
+    content: ' *';
+    color: var(--color-danger);
+}
+
+/* ========================================
+   INPUT FIELDS
+   ======================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px var(--spacing-md);
+    border: 2px solid var(--color-gray-lighter);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-medium);
+    font-family: var(--font-family-base);
+    color: var(--color-dark);
+    background: var(--color-white);
+    transition: all var(--transition-base);
+    line-height: 1.5;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--color-gray);
+    opacity: 0.7;
+}
+
+/* ========================================
+   INPUT TYPES
+   ======================================== */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+    height: 44px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+select {
+    height: 44px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+}
+
+/* ========================================
+   CHECKBOX & RADIO
+   ======================================== */
+
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.form-check input[type="checkbox"],
+.form-check input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: var(--spacing-sm);
+    cursor: pointer;
+}
+
+.form-check label {
+    margin-bottom: 0;
+    font-weight: var(--font-weight-normal);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Custom checkbox */
+.custom-checkbox {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.custom-checkbox .checkmark {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-gray-lighter);
+    border-radius: 4px;
+    background: var(--color-white);
+    transition: all var(--transition-fast);
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+
+.custom-checkbox .checkmark::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.custom-checkbox input:checked ~ .checkmark::after {
+    display: block;
+}
+
+/* ========================================
+   INPUT GROUPS
+   ======================================== */
+
+.input-group {
+    display: flex;
+    align-items: stretch;
+}
+
+.input-group input {
+    flex: 1;
+    border-radius: 0;
+}
+
+.input-group input:first-child {
+    border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
+}
+
+.input-group input:last-child {
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+}
+
+.input-group-prepend,
+.input-group-append {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-md);
+    background: var(--color-gray-lighter);
+    border: 2px solid var(--color-gray-lighter);
+    color: var(--color-gray);
+    font-size: var(--font-size-medium);
+    white-space: nowrap;
+}
+
+.input-group-prepend {
+    border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
+    border-right: none;
+}
+
+.input-group-append {
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+    border-left: none;
+}
+
+/* ========================================
+   INPUT WITH ICON
+   ======================================== */
+
+.input-icon {
+    position: relative;
+}
+
+.input-icon input {
+    padding-left: 40px;
+}
+
+.input-icon .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-gray);
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.input-icon-right input {
+    padding-left: 12px;
+    padding-right: 40px;
+}
+
+.input-icon-right .icon {
+    left: auto;
+    right: 12px;
+}
+
+/* ========================================
+   VALIDATION STATES
+   ======================================== */
+
+/* Success */
+.form-group.has-success input,
+.form-group.has-success select,
+.form-group.has-success textarea {
+    border-color: var(--color-success);
+}
+
+.form-group.has-success input:focus,
+.form-group.has-success select:focus,
+.form-group.has-success textarea:focus {
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+/* Error */
+.form-group.has-error input,
+.form-group.has-error select,
+.form-group.has-error textarea {
+    border-color: var(--color-danger);
+}
+
+.form-group.has-error input:focus,
+.form-group.has-error select:focus,
+.form-group.has-error textarea:focus {
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+/* Warning */
+.form-group.has-warning input,
+.form-group.has-warning select,
+.form-group.has-warning textarea {
+    border-color: var(--color-warning);
+}
+
+/* ========================================
+   HELP TEXT & FEEDBACK
+   ======================================== */
+
+.form-text {
+    display: block;
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-small);
+    color: var(--color-gray);
+    line-height: 1.4;
+}
+
+.form-feedback {
+    display: block;
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-medium);
+}
+
+.form-feedback.success {
+    color: var(--color-success);
+}
+
+.form-feedback.error {
+    color: var(--color-danger);
+}
+
+.form-feedback.warning {
+    color: var(--color-warning);
+}
+
+.form-feedback::before {
+    margin-right: 4px;
+}
+
+.form-feedback.success::before {
+    content: '✓';
+}
+
+.form-feedback.error::before {
+    content: '✕';
+}
+
+.form-feedback.warning::before {
+    content: '⚠';
+}
+
+/* ========================================
+   INPUT SIZES
+   ======================================== */
+
+.input-sm {
+    height: 36px;
+    padding: 8px var(--spacing-sm);
+    font-size: var(--font-size-small);
+}
+
+.input-lg {
+    height: 52px;
+    padding: 16px var(--spacing-lg);
+    font-size: var(--font-size-base);
+}
+
+/* ========================================
+   DISABLED STATE
+   ======================================== */
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+    background: var(--color-gray-lighter);
+    color: var(--color-gray);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ========================================
+   READONLY STATE
+   ======================================== */
+
+.form-group input:read-only,
+.form-group textarea:read-only {
+    background: var(--color-background);
+    cursor: default;
+}
+
+/* ========================================
+   FORM GRID
+   ======================================== */
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.form-row-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.form-col-full {
+    grid-column: 1 / -1;
+}
+
+/* ========================================
+   FLOATING LABELS
+   ======================================== */
+
+.form-floating {
+    position: relative;
+}
+
+.form-floating input,
+.form-floating textarea {
+    padding: 20px var(--spacing-md) 8px;
+}
+
+.form-floating label {
+    position: absolute;
+    top: 16px;
+    left: var(--spacing-md);
+    color: var(--color-gray);
+    font-weight: var(--font-weight-normal);
+    transition: all var(--transition-fast);
+    pointer-events: none;
+}
+
+.form-floating input:focus ~ label,
+.form-floating input:not(:placeholder-shown) ~ label,
+.form-floating textarea:focus ~ label,
+.form-floating textarea:not(:placeholder-shown) ~ label {
+    top: 4px;
+    font-size: var(--font-size-small);
+    color: var(--color-secondary);
+}
+
+/* ========================================
+   SEARCH INPUT
+   ======================================== */
+
+.search-input {
+    position: relative;
+}
+
+.search-input input {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.search-input::before {
+    content: '🔍';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+
+.search-input .clear-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--color-gray);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    line-height: 1;
+}
+
+.search-input .clear-btn:hover {
+    color: var(--color-dark);
+}
+
+/* ========================================
+   FILE INPUT
+   ======================================== */
+
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+.file-input-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 12px var(--spacing-lg);
+    background: var(--color-gray-lighter);
+    color: var(--color-dark);
+    border: 2px solid var(--color-gray-lighter);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.file-input-label:hover {
+    background: var(--color-gray-light);
+}
+
+/* ========================================
+   RESPONSIVE FORMS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .form-row,
+    .form-row-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: var(--font-size-small);
+    }
+
+    .form-group label {
+        font-size: var(--font-size-small);
+    }
+}
+
+@media (max-width: 480px) {
+    .form {
+        padding: var(--spacing-lg);
+    }
+
+    .form-group {
+        margin-bottom: var(--spacing-md);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    select {
+        height: 40px;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .form-group input,
+    .form-group select,
+    .form-group textarea,
+    .form-floating label {
+        transition: none;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        border-width: 2px;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        border: 1px solid #000;
+    }
+
+    button[type="submit"],
+    button[type="reset"] {
+        display: none;
+    }
+}

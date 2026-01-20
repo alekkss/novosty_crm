@@ -1,0 +1,121 @@
+/**
+ * Main CSS Entry Point
+ * Главная точка входа для всех стилей приложения
+ * 
+ * Single Responsibility: импортирует все CSS модули
+ * Dependency Inversion: определяет порядок загрузки стилей
+ */
+
+/* ========================================
+   ПОРЯДОК ИМПОРТА:
+   1. Base styles (глобальные стили, переменные)
+   2. Layout (структура страницы)
+   3. Navigation (навигация)
+   4. Components (компоненты в порядке зависимости)
+   ======================================== */
+
+/* ========================================
+   1. BASE STYLES
+   ======================================== */
+
+@import url('base.css');
+
+/* ========================================
+   2. LAYOUT
+   ======================================== */
+
+@import url('layout.css');
+
+/* ========================================
+   3. NAVIGATION
+   ======================================== */
+
+@import url('navigation.css');
+
+/* ========================================
+   4. COMPONENTS
+   ======================================== */
+
+/* Buttons - базовые компоненты, используются везде */
+@import url('components/buttons.css');
+
+/* Forms - используются в модальных окнах */
+@import url('components/forms.css');
+
+/* Tables - отображение данных */
+@import url('components/tables.css');
+
+/* Cards - карточки на главной странице */
+@import url('components/cards.css');
+
+/* Modals - модальные окна */
+@import url('components/modals.css');
+
+/* ========================================
+   PROJECT-SPECIFIC OVERRIDES
+   ======================================== */
+
+/* 
+   Здесь можно добавить специфичные для проекта переопределения
+   Используйте это только если нужно изменить стили компонентов
+   для конкретного проекта
+*/
+
+/* Пример переопределения для конкретного проекта */
+/* .custom-override {
+    // ваши стили
+} */
+
+/* ========================================
+   ADDITIONAL UTILITIES
+   ======================================== */
+
+/* Дополнительные утилиты, если нужны */
+.no-scroll {
+    overflow: hidden !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+/* Визуальное скрытие элемента (для a11y) */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* ========================================
+   DEBUG HELPERS (только для разработки)
+   ======================================== */
+
+/* 
+   Раскомментируйте для отладки layout проблем
+   НЕ ИСПОЛЬЗУЙТЕ в production!
+*/
+
+/*
+.debug * {
+    outline: 1px solid red;
+}
+
+.debug-grid {
+    background-image: 
+        linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+*/

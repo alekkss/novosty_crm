@@ -1,0 +1,383 @@
+/**
+ * Navigation Styles
+ * Стили навигационного меню и sidebar
+ * 
+ * Single Responsibility: отвечает только за стили навигации
+ */
+
+/* ========================================
+   MENU BUTTONS (BASE)
+   ======================================== */
+
+.menu-button {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    color: var(--color-white);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family-base);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+}
+
+.menu-button:hover::before {
+    transform: translateX(0);
+}
+
+.menu-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+.menu-button:active {
+    transform: translateX(3px);
+}
+
+.menu-button.active {
+    background: var(--color-secondary);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+.menu-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.menu-button:disabled:hover {
+    transform: none;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   MENU BUTTON ICONS
+   ======================================== */
+
+.menu-button .icon {
+    font-size: 20px;
+    min-width: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   NAVIGATION BUTTONS (specific)
+   ======================================== */
+
+.nav-button {
+    /* Наследует стили от .menu-button */
+}
+
+.nav-button:first-child .icon::before {
+    content: '🏠';
+}
+
+.nav-button:nth-child(2) .icon::before {
+    content: '👥';
+}
+
+/* ========================================
+   FILTER BUTTONS (specific)
+   ======================================== */
+
+.filter-button {
+    /* Наследует стили от .menu-button */
+}
+
+.filter-button::before {
+    content: '📊';
+    font-size: 20px;
+    min-width: 24px;
+}
+
+.filter-button:nth-child(2)::before {
+    content: '✅';
+}
+
+.filter-button:nth-child(3)::before {
+    content: '➕';
+}
+
+/* ========================================
+   BUTTON BADGE (для уведомлений)
+   ======================================== */
+
+.menu-button-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--color-danger);
+    color: var(--color-white);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-bold);
+    padding: 2px 6px;
+    border-radius: var(--border-radius-round);
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ========================================
+   BACK BUTTON
+   ======================================== */
+
+.btn-back {
+    background: rgba(52, 152, 219, 0.1);
+    color: var(--color-secondary);
+    border: 2px solid var(--color-secondary);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-family-base);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-back:hover {
+    background: var(--color-secondary);
+    color: var(--color-white);
+    transform: translateX(-3px);
+}
+
+.btn-back:active {
+    transform: translateX(-1px);
+}
+
+/* ========================================
+   BREADCRUMBS
+   ======================================== */
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-medium);
+    color: var(--color-gray);
+}
+
+.breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+}
+
+.breadcrumb-separator {
+    margin: 0 var(--spacing-xs);
+    color: var(--color-gray-light);
+}
+
+.breadcrumb-link {
+    color: var(--color-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.breadcrumb-link:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.breadcrumb-current {
+    color: var(--color-dark);
+    font-weight: var(--font-weight-medium);
+}
+
+/* ========================================
+   MENU SECTION TITLE
+   ======================================== */
+
+.menu-section-title {
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+}
+
+/* ========================================
+   RESPONSIVE NAVIGATION
+   ======================================== */
+
+@media (max-width: 768px) {
+    .menu-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-medium);
+    }
+
+    .menu-button .icon {
+        font-size: 18px;
+        min-width: 20px;
+    }
+
+    .btn-back {
+        font-size: var(--font-size-small);
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    .breadcrumbs {
+        font-size: var(--font-size-small);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .menu-section-title {
+        font-size: 11px;
+        margin-bottom: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-button {
+        padding: 10px var(--spacing-md);
+        font-size: var(--font-size-small);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .menu-button:hover {
+        transform: translateX(3px);
+    }
+
+    .btn-back {
+        padding: 8px var(--spacing-sm);
+    }
+}
+
+/* ========================================
+   MOBILE MENU TOGGLE
+   ======================================== */
+
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-white);
+    font-size: var(--font-size-xlarge);
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-index-sticky);
+    transition: all var(--transition-base);
+}
+
+.mobile-menu-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-xl);
+}
+
+.mobile-menu-toggle:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* ========================================
+   SIDEBAR OVERLAY (for mobile)
+   ======================================== */
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--z-index-sticky) - 1);
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ========================================
+   ACTIVE INDICATOR
+   ======================================== */
+
+.menu-button.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    background: var(--color-white);
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+}
+
+/* ========================================
+   LOADING STATE FOR NAVIGATION
+   ======================================== */
+
+.menu-button.loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.menu-button.loading::after {
+    content: '⏳';
+    position: absolute;
+    right: var(--spacing-md);
+    animation: spin 1s linear infinite;
+}
+
+/* ========================================
+   KEYBOARD NAVIGATION
+   ======================================== */
+
+.menu-button:focus-visible {
+    outline: 2px solid var(--color-white);
+    outline-offset: 2px;
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .menu-button,
+    .btn-back,
+    .mobile-menu-toggle {
+        transition: none;
+    }
+
+    .menu-button:hover {
+        transform: none;
+    }
+}
