@@ -15,9 +15,11 @@ urlpatterns = [
     
     # API endpoints (delegated to contacts app)
     path('api/', include('apps.contacts.urls')),
+    path('api/logs/', include('apps.logs.urls')),  # Добавить эту строку
     
     # Frontend (serves static HTML)
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('', include('apps.contacts.urls')),
 ]
 
 # Serve static files in development

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     
     # Local apps
     'apps.contacts',
+    'apps.core',      # Добавить
+    'apps.logs',      # Добавить
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.core.middleware.RequestLoggingMiddleware',
+    'apps.core.middleware.PerformanceLoggingMiddleware',
+    'apps.core.middleware.UserContextMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -157,3 +162,7 @@ SESSION_COOKIE_SECURE = False  # Временно для HTTP
 #     SECURE_BROWSER_XSS_FILTER = True
 #     SECURE_CONTENT_TYPE_NOSNIFF = True
 #     X_FRAME_OPTIONS = 'DENY'
+
+# Logging configuration
+from config.logging import LOGGING_CONFIG
+LOGGING = LOGGING_CONFIG
