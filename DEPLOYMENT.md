@@ -36,6 +36,11 @@ Novosty CRM - веб-приложение для управления конта
         │   └── urls.py                  # Роутинг приложения
 ├── templates/
 │   └── index.html               # Главная страница фронтенда
+├── static/
+    ├── css/
+        └── style.css             
+    ├── js/
+│       └── app.js
 ├── staticfiles/                 # Собранная статика (после collectstatic)
 ├── logs/                        # Логи приложения
 │   ├── gunicorn_error.log

@@ -29,7 +29,11 @@ class ContactListCreateAPIView(APIView):
     def get(self, request) -> Response:
         """
         GET /api/users
-        Retrieve all contacts.
+        GET /api/users?status=active
+        Retrieve all contacts or filter by status.
+        
+        Query Parameters:
+            status (optional): Filter by status ('active' or 'inactive')
         
         Returns:
             Response with list of contacts in format:
@@ -41,8 +45,15 @@ class ContactListCreateAPIView(APIView):
             }
         """
         try:
-            # Get all contacts from service
-            contacts = self._service.get_all_contacts()
+            # Check if status filter is provided
+            status_filter = request.GET.get('status')
+            
+            if status_filter == 'active':
+                # Get only active contacts
+                contacts = self._service.get_active_contacts()
+            else:
+                # Get all contacts
+                contacts = self._service.get_all_contacts()
             
             # Return response in format expected by frontend
             return Response(
