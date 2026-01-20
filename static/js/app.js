@@ -1,342 +1,317 @@
 /**
- * CRM System Application
- * Логика взаимодействия с API и управление UI
+ * Application Entry Point
+ * Главная точка входа приложения
+ * 
+ * Single Responsibility: координация и инициализация модулей
+ * Dependency Inversion: связывает модули через их публичные интерфейсы
  */
 
-const API_BASE_URL = '/api';
-
-// ========================================
-// НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ
-// ========================================
+import { CONFIG } from './config.js';
+import { screenManager } from './navigation/screenManager.js';
+import { userService } from './users/userService.js';
+import { userUI } from './users/userUI.js';
+import { modalManager } from './modals/modalManager.js';
+import { onDOMReady } from './utils/domHelpers.js';
 
 /**
- * Показать главный экран
- * Single Responsibility: отвечает только за переключение на главную страницу
+ * Главный класс приложения
+ * Координирует работу всех модулей
  */
-function showHomeScreen() {
-    // Скрыть все экраны
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
-    
-    // Показать главный экран
-    const homeScreen = document.getElementById('homeScreen');
-    if (homeScreen) {
-        homeScreen.classList.add('active');
+class Application {
+    /**
+     * Конструктор приложения
+     */
+    constructor() {
+        this.isInitialized = false;
+        this.currentFilter = CONFIG.FILTERS.ALL;
     }
-    
-    // Обновить активную навигационную кнопку
-    updateNavigationButtons('home');
-    
-    // Скрыть контролы пользователей в sidebar
-    const usersControls = document.getElementById('usersControls');
-    if (usersControls) {
-        usersControls.style.display = 'none';
-    }
-}
 
-/**
- * Показать экран пользователей
- * Single Responsibility: отвечает только за переключение на экран пользователей
- */
-function showUsersScreen() {
-    // Скрыть все экраны
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
-    
-    // Показать экран пользователей
-    const usersScreen = document.getElementById('usersScreen');
-    if (usersScreen) {
-        usersScreen.classList.add('active');
-    }
-    
-    // Обновить активную навигационную кнопку
-    updateNavigationButtons('users');
-    
-    // Показать контролы пользователей в sidebar
-    const usersControls = document.getElementById('usersControls');
-    if (usersControls) {
-        usersControls.style.display = 'block';
-    }
-    
-    // Загрузить пользователей при открытии экрана
-    loadUsers();
-}
-
-/**
- * Обновить состояние навигационных кнопок
- * @param {string} activeScreen - 'home' или 'users'
- */
-function updateNavigationButtons(activeScreen) {
-    const navButtons = document.querySelectorAll('.nav-button');
-    navButtons.forEach((btn, index) => {
-        btn.classList.remove('active');
-        if ((activeScreen === 'home' && index === 0) || 
-            (activeScreen === 'users' && index === 1)) {
-            btn.classList.add('active');
+    /**
+     * Инициализация приложения
+     * Запускается после загрузки DOM
+     */
+    async init() {
+        if (this.isInitialized) {
+            console.warn('[App] Application already initialized');
+            return;
         }
-    });
-}
 
-// ========================================
-// РАБОТА С ПОЛЬЗОВАТЕЛЯМИ (API)
-// ========================================
+        try {
+            // Инициализируем все модули
+            this._initModules();
 
-/**
- * Загрузить всех пользователей
- */
-async function loadUsers() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/users`);
-        const data = await response.json();
+            // Устанавливаем обработчики событий
+            this._setupEventHandlers();
 
-        if (data.users) {
-            displayUsers(data.users);
-            updateContentTitle('Все контакты');
+            // Регистрируем глобальные функции для HTML onclick
+            this._registerGlobalHandlers();
+
+            // Инициализируем экраны
+            screenManager.init();
+
+            this.isInitialized = true;
+            console.log('[App] Application initialized successfully');
+        } catch (error) {
+            console.error('[App] Initialization error:', error);
+            alert('Ошибка инициализации приложения');
         }
-    } catch (error) {
-        console.error('Error loading users:', error);
-        alert('Ошибка при загрузке контактов');
-    }
-}
-
-/**
- * Загрузить только активных пользователей
- */
-async function loadActiveUsers() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/users?status=active`);
-        const data = await response.json();
-
-        if (data.users) {
-            displayUsers(data.users);
-            updateContentTitle('Активные контакты');
-        }
-    } catch (error) {
-        console.error('Error loading active users:', error);
-        alert('Ошибка при загрузке активных контактов');
-    }
-}
-
-/**
- * Отобразить пользователей в таблице
- * @param {Array} users - массив объектов пользователей
- */
-function displayUsers(users) {
-    const tbody = document.getElementById('tableBody');
-
-    if (!tbody) {
-        console.error('Element tableBody not found');
-        return;
     }
 
-    if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">Контакты не найдены</td></tr>';
-        return;
+    /**
+     * Инициализация модулей
+     * @private
+     */
+    _initModules() {
+        // UI модули
+        userUI.init();
+        modalManager.init();
+        
+        // Менеджер экранов уже имеет метод init
+        // screenManager.init() - вызывается отдельно
     }
 
-    tbody.innerHTML = users.map(user => `
-        <tr>
-            <td>${user.id}</td>
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td>${user.phone}</td>
-            <td>
-                <span class="status-badge status-${user.status}">
-                    ${user.status === 'active' ? 'Активный' : 'Неактивный'}
-                </span>
-            </td>
-            <td>
-                <button class="btn btn-danger" onclick="deleteUser(${user.id}, '${user.name}')">
-                    🗑️ Удалить
-                </button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-/**
- * Удалить пользователя
- * @param {number} userId - ID пользователя
- * @param {string} userName - Имя пользователя для подтверждения
- */
-async function deleteUser(userId, userName) {
-    if (!confirm(`Вы уверены, что хотите удалить контакт "${userName}"?`)) {
-        return;
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+    /**
+     * Установка обработчиков событий
+     * @private
+     */
+    _setupEventHandlers() {
+        // Обработчик смены экрана
+        screenManager.onScreenChange((screenName) => {
+            this._handleScreenChange(screenName);
         });
 
-        const data = await response.json();
+        // Обработчик отправки формы добавления пользователя
+        modalManager.onSubmit('addUser', async (formData) => {
+            await this._handleCreateUser(formData);
+        });
 
-        if (response.ok) {
-            alert(data.message || 'Контакт успешно удален');
-            loadUsers();
+        // Обработчик удаления пользователя (через UI callback)
+        userUI.onDeleteUser(async (userId, userName) => {
+            await this._handleDeleteUser(userId, userName);
+        });
+    }
+
+    /**
+     * Регистрация глобальных функций для HTML onclick
+     * @private
+     */
+    _registerGlobalHandlers() {
+        // Навигация между экранами
+        window.showHomeScreen = () => screenManager.showHome();
+        window.showUsersScreen = () => screenManager.showUsers();
+
+        // Управление пользователями
+        window.showAll = () => this.loadAllUsers();
+        window.showActive = () => this.loadActiveUsers();
+        
+        // Модальные окна
+        window.openModal = () => modalManager.open('addUser');
+        window.closeModal = () => modalManager.close('addUser');
+
+        // Удаление пользователя
+        window.handleDeleteUser = async (userId, userName) => {
+            await this._handleDeleteUser(userId, userName);
+        };
+    }
+
+    /**
+     * Обработчик смены экрана
+     * @param {string} screenName - имя экрана
+     * @private
+     */
+    _handleScreenChange(screenName) {
+        console.log(`[App] Screen changed to: ${screenName}`);
+
+        // При переходе на экран пользователей - загружаем их
+        if (screenName === 'users') {
+            this.loadAllUsers();
+        }
+    }
+
+    /**
+     * Загрузить всех пользователей
+     */
+    async loadAllUsers() {
+        this.currentFilter = CONFIG.FILTERS.ALL;
+        await this._loadUsers(() => userService.getAllUsers(), CONFIG.UI_TEXTS.TITLES.ALL_CONTACTS);
+        this._updateFilterButtons(CONFIG.FILTERS.ALL);
+    }
+
+    /**
+     * Загрузить активных пользователей
+     */
+    async loadActiveUsers() {
+        this.currentFilter = CONFIG.FILTERS.ACTIVE;
+        await this._loadUsers(() => userService.getActiveUsers(), CONFIG.UI_TEXTS.TITLES.ACTIVE_CONTACTS);
+        this._updateFilterButtons(CONFIG.FILTERS.ACTIVE);
+    }
+
+    /**
+     * Общая функция загрузки пользователей
+     * @param {Function} loadFunction - функция загрузки
+     * @param {string} title - заголовок для отображения
+     * @private
+     */
+    async _loadUsers(loadFunction, title) {
+        try {
+            // Показываем индикатор загрузки
+            userUI.showLoading();
+            userUI.updateTitle(title);
+
+            // Загружаем данные
+            const users = await loadFunction();
+
+            // Отображаем пользователей
+            userUI.displayUsers(users);
+        } catch (error) {
+            console.error('[App] Error loading users:', error);
+            userUI.showError(error.message || CONFIG.UI_TEXTS.MESSAGES.ERROR_LOADING);
+        }
+    }
+
+    /**
+     * Обработчик создания пользователя
+     * @param {Object} formData - данные формы
+     * @private
+     */
+    async _handleCreateUser(formData) {
+        try {
+            // Создаем пользователя через сервис
+            await userService.createUser(formData);
+
+            // Закрываем модальное окно
+            modalManager.close('addUser');
+
+            // Показываем сообщение об успехе
+            alert(CONFIG.UI_TEXTS.MESSAGES.CONTACT_CREATED);
+
+            // Перезагружаем список пользователей с учетом текущего фильтра
+            if (this.currentFilter === CONFIG.FILTERS.ACTIVE) {
+                await this.loadActiveUsers();
+            } else {
+                await this.loadAllUsers();
+            }
+        } catch (error) {
+            console.error('[App] Error creating user:', error);
+            
+            // Форматируем ошибку для отображения
+            const errorMessage = this._formatErrorMessage(error);
+            alert(errorMessage);
+        }
+    }
+
+    /**
+     * Обработчик удаления пользователя
+     * @param {number} userId - ID пользователя
+     * @param {string} userName - имя пользователя
+     * @private
+     */
+    async _handleDeleteUser(userId, userName) {
+        // Запрашиваем подтверждение
+        const confirmed = confirm(CONFIG.UI_TEXTS.CONFIRMATIONS.DELETE_USER(userName));
+        
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            // Удаляем через сервис
+            const response = await userService.deleteUser(userId);
+
+            // Показываем сообщение об успехе
+            alert(response.message || CONFIG.UI_TEXTS.MESSAGES.CONTACT_DELETED);
+
+            // Удаляем строку из таблицы с анимацией
+            userUI.removeUserRow(userId);
+        } catch (error) {
+            console.error('[App] Error deleting user:', error);
+            alert(error.message || CONFIG.UI_TEXTS.MESSAGES.ERROR_DELETING);
+        }
+    }
+
+    /**
+     * Обновить состояние кнопок фильтра
+     * @param {number} activeFilter - индекс активного фильтра
+     * @private
+     */
+    _updateFilterButtons(activeFilter) {
+        const filterButtons = document.querySelectorAll('.filter-button');
+        
+        filterButtons.forEach((btn, index) => {
+            btn.classList.remove(CONFIG.CSS_CLASSES.ACTIVE);
+            
+            if (index === activeFilter) {
+                btn.classList.add(CONFIG.CSS_CLASSES.ACTIVE);
+            }
+        });
+    }
+
+    /**
+     * Форматировать сообщение об ошибке
+     * @param {Error} error - объект ошибки
+     * @returns {string} отформатированное сообщение
+     * @private
+     */
+    _formatErrorMessage(error) {
+        // Если ошибка содержит данные от сервера
+        if (error.data && error.data.error) {
+            const serverError = error.data.error;
+            
+            // Если это объект с полями
+            if (typeof serverError === 'object') {
+                return Object.entries(serverError)
+                    .map(([field, messages]) => `${field}: ${messages}`)
+                    .join('\n');
+            }
+            
+            return serverError;
+        }
+
+        return error.message || CONFIG.UI_TEXTS.MESSAGES.ERROR_CREATING;
+    }
+
+    /**
+     * Перезагрузить текущий список пользователей
+     */
+    async reloadUsers() {
+        if (this.currentFilter === CONFIG.FILTERS.ACTIVE) {
+            await this.loadActiveUsers();
         } else {
-            alert(data.error || 'Ошибка при удалении контакта');
-        }
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        alert('Ошибка при удалении контакта');
-    }
-}
-
-// ========================================
-// ФИЛЬТРАЦИЯ И УПРАВЛЕНИЕ
-// ========================================
-
-/**
- * Показать всех пользователей и обновить активную кнопку фильтра
- */
-function showAll() {
-    // Переключить активную кнопку фильтра
-    updateFilterButtons(0);
-    loadUsers();
-}
-
-/**
- * Показать только активных пользователей и обновить активную кнопку фильтра
- */
-function showActive() {
-    // Переключить активную кнопку фильтра
-    updateFilterButtons(1);
-    loadActiveUsers();
-}
-
-/**
- * Обновить состояние кнопок фильтра
- * @param {number} activeIndex - индекс активной кнопки (0 или 1)
- */
-function updateFilterButtons(activeIndex) {
-    const filterButtons = document.querySelectorAll('.filter-button');
-    filterButtons.forEach((btn, index) => {
-        btn.classList.remove('active');
-        if (index === activeIndex) {
-            btn.classList.add('active');
-        }
-    });
-}
-
-/**
- * Обновить заголовок контента
- * @param {string} title - новый заголовок
- */
-function updateContentTitle(title) {
-    const titleElement = document.getElementById('contentTitle');
-    if (titleElement) {
-        titleElement.textContent = title;
-    }
-}
-
-// ========================================
-// МОДАЛЬНОЕ ОКНО
-// ========================================
-
-/**
- * Открыть модальное окно добавления контакта
- */
-function openModal() {
-    const modal = document.getElementById('modal');
-    if (modal) {
-        modal.classList.add('active');
-        const form = document.getElementById('addUserForm');
-        if (form) {
-            form.reset();
+            await this.loadAllUsers();
         }
     }
-}
 
-/**
- * Закрыть модальное окно
- */
-function closeModal() {
-    const modal = document.getElementById('modal');
-    if (modal) {
-        modal.classList.remove('active');
+    /**
+     * Получить статус приложения
+     * @returns {Object} объект со статусом
+     */
+    getStatus() {
+        return {
+            initialized: this.isInitialized,
+            currentScreen: screenManager.getCurrentScreen(),
+            currentFilter: this.currentFilter,
+        };
     }
 }
 
-// ========================================
-// ИНИЦИАЛИЗАЦИЯ
-// ========================================
+/**
+ * Создаем единственный экземпляр приложения
+ */
+const app = new Application();
 
 /**
- * Инициализация приложения при загрузке страницы
+ * Инициализация при загрузке DOM
  */
-document.addEventListener('DOMContentLoaded', () => {
-    // По умолчанию показываем главный экран
-    showHomeScreen();
-
-    // Обработчик формы добавления пользователя
-    const form = document.getElementById('addUserForm');
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formData = {
-                name: document.getElementById('userName').value,
-                email: document.getElementById('userEmail').value,
-                phone: document.getElementById('userPhone').value,
-                status: document.getElementById('userStatus').value
-            };
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/users`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    closeModal();
-                    loadUsers();
-                    alert('Контакт успешно создан!');
-                } else {
-                    alert(formatErrorMessage(data.error));
-                }
-            } catch (error) {
-                console.error('Error creating user:', error);
-                alert('Ошибка при создании контакта');
-            }
-        });
-    }
-
-    // Закрытие модального окна по клику на overlay
-    const modal = document.getElementById('modal');
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target.id === 'modal') {
-                closeModal();
-            }
-        });
-    }
+onDOMReady(() => {
+    app.init();
 });
 
-// ========================================
-// УТИЛИТЫ
-// ========================================
+/**
+ * Экспортируем экземпляр приложения для доступа из консоли
+ */
+window.app = app;
 
 /**
- * Форматировать сообщение об ошибке
- * @param {Object|string} error - объект ошибки или строка
- * @returns {string} отформатированное сообщение
+ * Экспорт для модульной системы
  */
-function formatErrorMessage(error) {
-    if (typeof error === 'object') {
-        return Object.entries(error)
-            .map(([field, messages]) => `${field}: ${messages}`)
-            .join('\n');
-    }
-    return error;
-}
+export default app;
