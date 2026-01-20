@@ -120,13 +120,14 @@ class ContactService:
             email: New email (optional)
             phone: New phone (optional)
             status: New status (optional)
-            
+        
         Returns:
             Updated contact dictionary or None if not found
-            
+        
         Raises:
             ValidationError: If validation fails
         """
+        print(f"!!! UPDATE_CONTACT: id={contact_id}, email={repr(email)}")
         contact = self._repository.get_by_id(contact_id)
         if contact is None:
             return None
@@ -139,19 +140,38 @@ class ContactService:
         
         if email is not None:
             email = email.strip().lower()
-            # Validate email
+
+            
+            # Validate email format
             try:
                 validate_email(email)
             except ValidationError:
                 raise ValidationError({'email': 'Некорректный email адрес'})
             
-            # Check uniqueness (excluding current contact)
-            existing = self._repository.get_by_email(email)
-            if existing and existing.id != contact_id:
-                raise ValidationError({
-                    'email': 'Контакт с таким email уже существует'
-                })
-            
+            # Check uniqueness ONLY if email changed
+            with open('/tmp/debug_email.log', 'a') as f:
+                f.write(f"=== EMAIL CHECK ===\n")
+                f.write(f"new email: |{email}|\n")
+                f.write(f"contact.email: |{contact.email}|\n")
+                f.write(f"contact.email.lower(): |{contact.email.lower()}|\n")
+                f.write(f"equal? {email == contact.email.lower()}\n")
+                f.write(f"contact_id param: {contact_id}\n")
+                f.write(f"contact.id: {contact.id}\n\n")
+
+            if email != contact.email.lower():
+                existing = self._repository.get_by_email(email)
+                
+                with open('/tmp/debug_email.log', 'a') as f:
+                    f.write(f"Email changed! Checking uniqueness...\n")
+                    f.write(f"existing: {existing}\n")
+                    if existing:
+                        f.write(f"existing.id: {existing.id}\n")
+                        f.write(f"contact_id: {contact_id}\n")
+                        f.write(f"existing.id != contact_id: {existing.id != contact_id}\n\n")
+                
+                if existing and existing.id != contact_id:
+                    raise ValidationError({'email': 'Контакт с таким email уже существует'})
+
             update_data['email'] = email
         
         if phone is not None:

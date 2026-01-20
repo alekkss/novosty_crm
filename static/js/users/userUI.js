@@ -155,8 +155,16 @@ class UserUI {
                 </td>
                 <td>
                     <button 
+                        class="btn btn-secondary" 
+                        onclick="window.handleEditUser(${user.id})"
+                        aria-label="Редактировать ${safeUser.name}"
+                    >
+                        ✏️ Редактировать
+                    </button>
+                    <button 
                         class="btn btn-danger" 
                         onclick="window.handleDeleteUser(${user.id}, '${this._escapeHtml(user.name)}')"
+                        aria-label="Удалить ${safeUser.name}"
                     >
                         🗑️ Удалить
                     </button>

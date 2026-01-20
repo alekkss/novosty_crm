@@ -41,6 +41,9 @@ class ModalManager {
         // Регистрируем модальное окно добавления пользователя
         this.registerModal('addUser', CONFIG.DOM_IDS.MODAL, CONFIG.DOM_IDS.ADD_USER_FORM);
         
+        // Регистрируем модальное окно редактирования пользователя
+        this.registerModal('editUser', CONFIG.DOM_IDS.EDIT_MODAL, CONFIG.DOM_IDS.EDIT_USER_FORM);
+        
         // Устанавливаем обработчики
         this._setupEventListeners();
     }
@@ -81,8 +84,8 @@ class ModalManager {
         // Добавляем класс active для отображения
         addClass(modal.element, CONFIG.CSS_CLASSES.ACTIVE);
         
-        // Сбрасываем форму если есть
-        if (modal.form) {
+        // Сбрасываем форму только для addUser (не для editUser, т.к. там будут предзаполненные данные)
+        if (modal.form && name === 'addUser') {
             resetForm(modal.form);
         }
 
@@ -165,8 +168,48 @@ class ModalManager {
             };
         }
 
+        // Специфичная логика для формы редактирования пользователя
+        if (name === 'editUser') {
+            return {
+                id: getValue(CONFIG.DOM_IDS.EDIT_USER_ID),
+                name: getValue(CONFIG.DOM_IDS.EDIT_USER_NAME),
+                email: getValue(CONFIG.DOM_IDS.EDIT_USER_EMAIL),
+                phone: getValue(CONFIG.DOM_IDS.EDIT_USER_PHONE),
+                status: getValue(CONFIG.DOM_IDS.EDIT_USER_STATUS),
+            };
+        }
+
         // Общая логика для других форм
         return this._getGenericFormData(modal.form);
+    }
+
+    /**
+     * Заполнить форму модального окна данными
+     * @param {string} name - имя модального окна
+     * @param {Object} data - данные для заполнения
+     */
+    fillForm(name, data) {
+        const modal = this.modals.get(name);
+        
+        if (!modal || !modal.form) {
+            console.error(`[ModalManager] Modal "${name}" not found or has no form`);
+            return;
+        }
+
+        // Заполнение для editUser
+        if (name === 'editUser') {
+            const idField = getElement(CONFIG.DOM_IDS.EDIT_USER_ID);
+            const nameField = getElement(CONFIG.DOM_IDS.EDIT_USER_NAME);
+            const emailField = getElement(CONFIG.DOM_IDS.EDIT_USER_EMAIL);
+            const phoneField = getElement(CONFIG.DOM_IDS.EDIT_USER_PHONE);
+            const statusField = getElement(CONFIG.DOM_IDS.EDIT_USER_STATUS);
+
+            if (idField) idField.value = data.id || '';
+            if (nameField) nameField.value = data.name || '';
+            if (emailField) emailField.value = data.email || '';
+            if (phoneField) phoneField.value = data.phone || '';
+            if (statusField) statusField.value = data.status || 'active';
+        }
     }
 
     /**
@@ -297,7 +340,7 @@ class ModalManager {
         if (!modal.form) return;
 
         setTimeout(() => {
-            const firstInput = modal.form.querySelector('input, textarea, select');
+            const firstInput = modal.form.querySelector('input:not([type="hidden"]), textarea, select');
             if (firstInput) {
                 firstInput.focus();
             }

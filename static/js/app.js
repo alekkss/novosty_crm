@@ -85,6 +85,11 @@ class Application {
             await this._handleCreateUser(formData);
         });
 
+        // Обработчик отправки формы редактирования пользователя
+        modalManager.onSubmit('editUser', async (formData) => {
+            await this._handleUpdateUser(formData);
+        });
+
         // Обработчик удаления пользователя (через UI callback)
         userUI.onDeleteUser(async (userId, userName) => {
             await this._handleDeleteUser(userId, userName);
@@ -107,6 +112,12 @@ class Application {
         // Модальные окна
         window.openModal = () => modalManager.open('addUser');
         window.closeModal = () => modalManager.close('addUser');
+        window.closeEditModal = () => modalManager.close('editUser');
+
+        // Редактирование пользователя
+        window.handleEditUser = async (userId) => {
+            await this._handleOpenEditModal(userId);
+        };
 
         // Удаление пользователя
         window.handleDeleteUser = async (userId, userName) => {
@@ -193,6 +204,68 @@ class Application {
             }
         } catch (error) {
             console.error('[App] Error creating user:', error);
+            
+            // Форматируем ошибку для отображения
+            const errorMessage = this._formatErrorMessage(error);
+            alert(errorMessage);
+        }
+    }
+
+    /**
+     * Обработчик открытия модального окна редактирования
+     * @param {number} userId - ID пользователя
+     * @private
+     */
+    async _handleOpenEditModal(userId) {
+        try {
+            // Загружаем данные пользователя
+            const user = await userService.getUserById(userId);
+            
+            // Заполняем форму данными пользователя
+            modalManager.fillForm('editUser', user);
+            
+            // Открываем модальное окно
+            modalManager.open('editUser');
+        } catch (error) {
+            console.error('[App] Error opening edit modal:', error);
+            alert('Ошибка при загрузке данных пользователя');
+        }
+    }
+
+    /**
+     * Обработчик обновления пользователя
+     * @param {Object} formData - данные формы
+     * @private
+     */
+    async _handleUpdateUser(formData) {
+        try {
+            const userId = formData.id;
+            
+            // Удаляем ID из данных (он не нужен в теле запроса)
+            const updateData = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                status: formData.status,
+            };
+            
+            // Обновляем пользователя через сервис
+            await userService.updateUser(userId, updateData);
+
+            // Закрываем модальное окно
+            modalManager.close('editUser');
+
+            // Показываем сообщение об успехе
+            alert(CONFIG.UI_TEXTS.MESSAGES.CONTACT_UPDATED);
+
+            // Перезагружаем список пользователей с учетом текущего фильтра
+            if (this.currentFilter === CONFIG.FILTERS.ACTIVE) {
+                await this.loadActiveUsers();
+            } else {
+                await this.loadAllUsers();
+            }
+        } catch (error) {
+            console.error('[App] Error updating user:', error);
             
             // Форматируем ошибку для отображения
             const errorMessage = this._formatErrorMessage(error);

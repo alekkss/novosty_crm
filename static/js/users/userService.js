@@ -60,12 +60,23 @@ class UserService {
      */
     async getUserById(userId) {
         try {
-            const endpoint = CONFIG.ENDPOINTS.USER_BY_ID(userId);
-            const response = await this.client.get(endpoint);
-            return response.user || null;
+            console.log(`[UserService] Fetching user ${userId}...`);
+            
+            // Получаем всех пользователей
+            const users = await this.getAllUsers();
+            
+            // Ищем нужного пользователя
+            const user = users.find(u => u.id === parseInt(userId));
+            
+            if (!user) {
+                throw new Error(`Пользователь с ID ${userId} не найден`);
+            }
+            
+            console.log('[UserService] User found:', user);
+            return user;
         } catch (error) {
             console.error(`[UserService] Error loading user ${userId}:`, error);
-            throw new Error(CONFIG.UI_TEXTS.MESSAGES.ERROR_LOADING);
+            throw error;
         }
     }
 

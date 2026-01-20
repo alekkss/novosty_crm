@@ -46,6 +46,15 @@ export const CONFIG = Object.freeze({
         USER_EMAIL: 'userEmail',
         USER_PHONE: 'userPhone',
         USER_STATUS: 'userStatus',
+
+        // Редактирование
+        EDIT_MODAL: 'editModal',
+        EDIT_USER_FORM: 'editUserForm',
+        EDIT_USER_ID: 'editUserId',
+        EDIT_USER_NAME: 'editUserName',
+        EDIT_USER_EMAIL: 'editUserEmail',
+        EDIT_USER_PHONE: 'editUserPhone',
+        EDIT_USER_STATUS: 'editUserStatus',
     },
 
     /**
@@ -76,9 +85,12 @@ export const CONFIG = Object.freeze({
             ERROR_CREATING: 'Ошибка при создании контакта',
             ERROR_DELETING: 'Ошибка при удалении контакта',
             NO_CONTACTS: 'Контакты не найдены',
+            CONTACT_UPDATED: 'Контакт успешно обновлен!',
+            ERROR_UPDATING: 'Ошибка при обновлении контакта',
         },
         CONFIRMATIONS: {
             DELETE_USER: (name) => `Вы уверены, что хотите удалить контакт "${name}"?`,
+            UPDATE_USER: (name) => `Сохранить изменения для "${name}"?`,
         },
         STATUS_LABELS: {
             ACTIVE: 'Активный',
