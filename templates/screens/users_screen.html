@@ -1,0 +1,45 @@
+{# Users Screen Component #}
+{# Экран управления пользователями с таблицей контактов #}
+
+<div id="usersScreen" class="screen">
+    <div class="header">
+        {# Кнопка возврата в главное меню #}
+        <div class="header-with-back">
+            <button 
+                class="btn-back" 
+                onclick="showHomeScreen()"
+                aria-label="Вернуться в главное меню"
+            >
+                ← Назад в меню
+            </button>
+        </div>
+        
+        {# Заголовки экрана #}
+        <h1 id="contentTitle">Все контакты</h1>
+        <p id="contentSubtitle">Управление базой клиентов</p>
+    </div>
+
+    {# Таблица пользователей #}
+    <div class="table-container" role="region" aria-label="Таблица контактов">
+        <table id="usersTable">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Действия</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {# Данные загружаются через JavaScript #}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px;">
+                        <div class="loading-spinner">⏳ Загрузка...</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

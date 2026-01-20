@@ -106,17 +106,17 @@
 }
 
 .filter-button::before {
-    content: '📊';
+    /* content: '📊'; */
     font-size: 20px;
     min-width: 24px;
 }
 
 .filter-button:nth-child(2)::before {
-    content: '✅';
+    /* content: '✅'; */
 }
 
 .filter-button:nth-child(3)::before {
-    content: '➕';
+    /* content: '➕'; */
 }
 
 /* ========================================

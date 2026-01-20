@@ -1,0 +1,28 @@
+{# Sidebar Controls Component #}
+{# Компонент управления пользователями в sidebar #}
+
+<div class="users-controls" id="usersControls" style="display: none;">
+    <button 
+        class="menu-button filter-button active" 
+        onclick="showAll()"
+        aria-label="Показать всех пользователей"
+    >
+        Показать всех
+    </button>
+    
+    <button 
+        class="menu-button filter-button" 
+        onclick="showActive()"
+        aria-label="Показать только активных пользователей"
+    >
+        Показать активных
+    </button>
+    
+    <button 
+        class="menu-button filter-button" 
+        onclick="openModal()"
+        aria-label="Добавить новый контакт"
+    >
+        Добавить новый контакт
+    </button>
+</div>

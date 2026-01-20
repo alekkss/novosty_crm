@@ -1,0 +1,59 @@
+{# Home Screen Component #}
+{# Главный экран приложения с карточками разделов #}
+
+<div id="homeScreen" class="screen active">
+    <div class="header">
+        <h1>Добро пожаловать в CRM Систему</h1>
+        <p>Управление клиентами и контактами</p>
+    </div>
+
+    <div class="dashboard-cards">
+        {# Карточка "Пользователи" #}
+        <div class="dashboard-card" role="article">
+            <div class="card-icon" aria-hidden="true">👥</div>
+            <div class="card-content">
+                <h3>Пользователи</h3>
+                <p>Управление базой контактов клиентов</p>
+                <button 
+                    class="btn btn-primary" 
+                    onclick="showUsersScreen()"
+                    aria-label="Перейти к управлению пользователями"
+                >
+                    Перейти
+                </button>
+            </div>
+        </div>
+
+        {# Карточка "Статистика" #}
+        <div class="dashboard-card" role="article">
+            <div class="card-icon" aria-hidden="true">📊</div>
+            <div class="card-content">
+                <h3>Статистика</h3>
+                <p>Скоро появится функционал аналитики</p>
+                <button 
+                    class="btn btn-secondary" 
+                    disabled
+                    aria-label="Статистика (скоро будет доступна)"
+                >
+                    Скоро
+                </button>
+            </div>
+        </div>
+
+        {# Карточка "Настройки" #}
+        <div class="dashboard-card" role="article">
+            <div class="card-icon" aria-hidden="true">⚙️</div>
+            <div class="card-content">
+                <h3>Настройки</h3>
+                <p>Конфигурация системы</p>
+                <button 
+                    class="btn btn-secondary" 
+                    disabled
+                    aria-label="Настройки (скоро будут доступны)"
+                >
+                    Скоро
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

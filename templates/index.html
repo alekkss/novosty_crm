@@ -1,147 +1,39 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM Система - novosty-top.ru</title>
-    
-    <!-- Подключаем модульные стили -->
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-</head>
-<body>
-    <div class="container">
-        <!-- Левая панель -->
-        <div class="sidebar">
-            <div class="logo">CRM Система</div>
-            
-            <!-- НАВИГАЦИОННОЕ МЕНЮ -->
-            <div class="navigation-section">
-                <button class="menu-button nav-button active" onclick="showHomeScreen()">
-                    <span class="icon">🏠</span>
-                    <span>Главная</span>
-                </button>
-                <button class="menu-button nav-button" onclick="showUsersScreen()">
-                    <span class="icon">👥</span>
-                    <span>Пользователи</span>
-                </button>
-            </div>
 
-            <div class="divider"></div>
+{% block title %}CRM Система - Управление контактами{% endblock %}
 
-            <!-- УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ (показывается только на экране пользователей) -->
-            <div class="users-controls" id="usersControls" style="display: none;">
-                <button class="menu-button filter-button active" onclick="showAll()">Показать всех</button>
-                <button class="menu-button filter-button" onclick="showActive()">Показать активных</button>
-                <button class="menu-button filter-button" onclick="openModal()">Добавить новый контакт</button>
-            </div>
-        </div>
+{% block meta_description %}Система управления взаимоотношениями с клиентами - CRM для эффективного управления контактами{% endblock %}
 
-        <!-- Правая панель -->
-        <div class="content">
-            <!-- ГЛАВНЫЙ ЭКРАН -->
-            <div id="homeScreen" class="screen active">
-                <div class="header">
-                    <h1>Добро пожаловать в CRM Систему</h1>
-                    <p>Управление клиентами и контактами</p>
-                </div>
-
-                <div class="dashboard-cards">
-                    <div class="dashboard-card">
-                        <div class="card-icon">👥</div>
-                        <div class="card-content">
-                            <h3>Пользователи</h3>
-                            <p>Управление базой контактов клиентов</p>
-                            <button class="btn btn-primary" onclick="showUsersScreen()">Перейти</button>
-                        </div>
-                    </div>
-
-                    <div class="dashboard-card">
-                        <div class="card-icon">📊</div>
-                        <div class="card-content">
-                            <h3>Статистика</h3>
-                            <p>Скоро появится функционал аналитики</p>
-                            <button class="btn btn-secondary" disabled>Скоро</button>
-                        </div>
-                    </div>
-
-                    <div class="dashboard-card">
-                        <div class="card-icon">⚙️</div>
-                        <div class="card-content">
-                            <h3>Настройки</h3>
-                            <p>Конфигурация системы</p>
-                            <button class="btn btn-secondary" disabled>Скоро</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ЭКРАН ПОЛЬЗОВАТЕЛЕЙ -->
-            <div id="usersScreen" class="screen">
-                <div class="header">
-                    <div class="header-with-back">
-                        <button class="btn-back" onclick="showHomeScreen()">
-                            ← Назад в меню
-                        </button>
-                    </div>
-                    <h1 id="contentTitle">Все контакты</h1>
-                    <p id="contentSubtitle">Управление базой клиентов</p>
-                </div>
-
-                <div class="table-container">
-                    <table id="usersTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Имя</th>
-                                <th>Email</th>
-                                <th>Телефон</th>
-                                <th>Статус</th>
-                                <th>Действия</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <!-- Данные загружаются через JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+{% block content %}
+<div class="container">
+    <!-- Левая панель (Sidebar) -->
+    <div class="sidebar">
+        <div class="logo">CRM Система</div>
+        
+        <!-- Навигационное меню -->
+        {% include 'components/navigation.html' %}
+        
+        <div class="divider"></div>
+        
+        <!-- Контролы управления пользователями -->
+        {% include 'components/sidebar_controls.html' %}
     </div>
 
-    <!-- Модальное окно -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <h2>Добавить новый контакт</h2>
-            <form id="addUserForm">
-                <div class="form-group">
-                    <label for="userName">Имя</label>
-                    <input type="text" id="userName" required>
-                </div>
-                <div class="form-group">
-                    <label for="userEmail">Email</label>
-                    <input type="email" id="userEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="userPhone">Телефон</label>
-                    <input type="tel" id="userPhone" required>
-                </div>
-                <div class="form-group">
-                    <label for="userStatus">Статус</label>
-                    <select id="userStatus" required>
-                        <option value="active">Активный</option>
-                        <option value="inactive">Неактивный</option>
-                    </select>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                </div>
-            </form>
-        </div>
+    <!-- Правая панель (Content) -->
+    <div class="content">
+        <!-- Главный экран -->
+        {% include 'screens/home_screen.html' %}
+        
+        <!-- Экран пользователей -->
+        {% include 'screens/users_screen.html' %}
     </div>
+</div>
 
-    <!-- Подключаем модульный JavaScript -->
-    <script type="module" src="{% static 'js/app.js' %}"></script>
-</body>
-</html>
+<!-- Модальное окно добавления пользователя -->
+{% include 'modals/add_user_modal.html' %}
+{% endblock %}
+
+{% block extra_js %}
+{# Здесь можно добавить дополнительные скрипты если нужно #}
+{% endblock %}
