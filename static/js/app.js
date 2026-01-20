@@ -12,6 +12,8 @@ import { userService } from './users/userService.js';
 import { userUI } from './users/userUI.js';
 import { modalManager } from './modals/modalManager.js';
 import { onDOMReady } from './utils/domHelpers.js';
+import logger from './utils/logger.js';
+import errorHandler from './utils/errorHandler.js';
 
 /**
  * Главный класс приложения
