@@ -164,5 +164,6 @@ SESSION_COOKIE_SECURE = False  # Временно для HTTP
 #     X_FRAME_OPTIONS = 'DENY'
 
 # Logging configuration
-from config.logging import LOGGING_CONFIG
-LOGGING = LOGGING_CONFIG
+from config.logging import get_logging_config
+
+LOGGING = get_logging_config()
